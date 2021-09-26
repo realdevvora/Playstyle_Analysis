@@ -1,0 +1,16 @@
+{%extends "analysis/base.html"%}
+{% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{message}}</div>
+        {%endfor%}
+    {%endif%}
+{% block content %}
+    <h1 class="display-4">Playstyle Analysis</h1>
+    <br>
+    <form action="analysis/">
+        What champ would you like to review?: <input type="text" name="champion" class="form-control"><br>
+        What is your summoner name?: <input type="text" name="summonerName" class="form-control"><br>
+        <input type="submit">
+    </form>
+
+{% endblock content%}

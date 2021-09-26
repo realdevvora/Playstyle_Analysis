@@ -1,0 +1,86 @@
+{%extends "analysis/base.html"%}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<!-- https://www.youtube.com/watch?v=RhJIMUMJ_Do -->
+
+
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded" src="{% static icon %}">
+        <div class="media-body">
+          <h2 class="account-heading text-right" style="font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif "> {{ name }} </h2>
+          <p class="text-right" style="font-family:'Courier New', Courier, monospace"> Champion: {{champion}}</p>
+        </div>
+      </div>
+    </div>
+    <p class="lead" style="font-family:'Courier New', Courier, monospace">Splitpushing: {{splitting}}<br></p>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" id="sp" aria-valuenow="{{splitting}}" aria-valuemin="0" aria-valuemax="8"></div>
+    </div>
+    <p class="lead" style="font-family:'Courier New', Courier, monospace">Fighting: {{fighting}}<br></p>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" id="ft" aria-valuenow="{{fighting}}" aria-valuemin="0" aria-valuemax="8"></div>
+    </div>
+    <p class="lead" style="font-family:'Courier New', Courier, monospace">Aggression: {{aggression}}<br></p>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" id="ag" aria-valuenow="{{aggression}}" aria-valuemin="0" aria-valuemax="8"></div>
+    </div>
+    <p class="lead" style="font-family:'Courier New', Courier, monospace">Snowballing: {{snowballing}}<br></p>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" id="sb" aria-valuenow="{{snowballing}}" aria-valuemin="0" aria-valuemax="8"></div>
+    </div>
+    <br>
+    {% for i in style %}
+      <ul class="list-unstyled" style="font-family:'Courier New', Courier, monospace">
+        <b><li>{{ i }}</li></b>
+      </ul>
+    {%endfor%}
+    <p class="lead" style="font-family:'Courier New', Courier, monospace">Improvements for your playstyle(s): </p>
+    {%for suggestion in feedback%}
+      <!-- Button trigger modal -->
+      {% if "Important" in suggestion.0 %}
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{ suggestion }}">
+          {{suggestion.0}}
+        </button>
+      {%else%}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ suggestion }}">
+          {{suggestion.0}}
+        </button>
+      {%endif%}
+      <!-- Modal -->
+      <div class="modal fade" id="{{ suggestion }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">{{suggestion.0}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{suggestion.1}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br><br>
+    {%endfor%}
+
+    
+    <br><br><br><br><br>
+    <script>
+      function myFunction() {
+        document.getElementById("sp").style.width = "{{s}}" + "%";
+        document.getElementById("ft").style.width = "{{f}}" + "%";
+        document.getElementById("ag").style.width = "{{a}}" + "%";
+        document.getElementById("sb").style.width = "{{sn}}" + "%";
+      }
+      myFunction();
+    </script>
+    
+
+{% endblock content%}
