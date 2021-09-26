@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$f3ud%^8a7$=*&t3t55#139x^i(3xw)wu1)xo3s$i+f_739dq_'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -53,7 +53,7 @@ CASSIOPEIA_LOGGING = {
     "CORE": "WARNING"
 }
 
-CASSIOPEIA_RIOT_API_KEY = "RGAPI-dc4f1814-6ace-44af-a804-5064eeabf342"  # api key in env var
+CASSIOPEIA_RIOT_API_KEY = os.environ.get('RIOT_API_KEY')  # api key in env var
 CASSIOPEIA_PIPELINE = {
     "Omnistone": {},
     "DDragon": {},
