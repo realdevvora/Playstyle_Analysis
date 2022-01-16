@@ -14,27 +14,35 @@ from cassiopeia.core.staticdata import champion
 from cassiopeia.data import Queue
 from datapipelines.common import NotFoundError
 
+
+
 @login_required
 def home(request):
     context = {}
     try:
         champ = str(request.GET["champion"])
-        champions=[cass.get_champion(champ)]
-        summoner = cass.Summoner(name=str(request.GET["summonerName"]))
+        champions=[cass.get_champion(champ, "NA")] # manually set region
+        summoner = cass.Summoner(name=str(request.GET["summonerName"]), region="NA")
     except (TypeError, SearchError, KeyError):
         messages.warning(request, "Sorry, champion name is incorrect (champion name is case sensitive)")
         return redirect('analysis-search')
     if summoner.exists == False:
         messages.warning(request, "Sorry, summoner name is incorrect")
         return redirect('analysis-search')
-    context["name"] = summoner.name
     
+    context["name"] = summoner.name
     context["champion"] = champ
     context["key"] = str(champions[0].key)
-    history = cass.get_match_history(summoner=summoner, begin_index=0, end_index=7,queues=[Queue.ranked_solo_fives], champions=champions)
+    history = []
+    matches = summoner.match_history
+
+    for i in range(7):
+        history.append(matches[i])
+
     if len(history) < 7:
         messages.warning(request, "Sorry, you do not have enough games on your champion (minimum 7)")
         return redirect('analysis-search')
+        
     context["icon"] =  f'analysis/champions/{str(champions[0].key)}.png'
 
     goldCounter = 0 
@@ -194,8 +202,6 @@ def home(request):
     # whichever array is shorter, will be what closest represents their playstyle
     # after that, help the player determine what they need to improve upon in their playstyle
     # if multiple arrays are of the same length, the player has a more general playstyle (give them tips to change their playstyle)
-
-
 
     if kdaCounter >= excellent:
         aggression+=1
@@ -540,8 +546,6 @@ def home(request):
 
     return render(request, 'analysis/analysis.html', context)
 
-
-    
 
 def about(request):
     context = {
