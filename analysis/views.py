@@ -21,7 +21,7 @@ def home(request):
     context = {}
     try:
         champ = str(request.GET["champion"])
-        champions=[cass.get_champion(champ, "NA")] # manually set region
+        champions=cass.get_champion(champ, "NA") # manually set region
         summoner = cass.Summoner(name=str(request.GET["summonerName"]), region="NA")
     except (TypeError, SearchError, KeyError):
         messages.warning(request, "Sorry, champion name is incorrect (champion name is case sensitive)")
@@ -32,18 +32,23 @@ def home(request):
     
     context["name"] = summoner.name
     context["champion"] = champ
-    context["key"] = str(champions[0].key)
+    context["key"] = str(champions.key)
+
     history = []
     matches = summoner.match_history
+    gamesChecked = 0
 
-    for i in range(7):
-        history.append(matches[i])
+    while len(history) < 7 or gamesChecked >= 50:
+        for participant in matches[gamesChecked].participants:
+            if participant.summoner == summoner and participant.champion == champions:
+                history.append(matches[gamesChecked])
+        gamesChecked+=1
 
     if len(history) < 7:
-        messages.warning(request, "Sorry, you do not have enough games on your champion (minimum 7)")
+        messages.warning(request, "Sorry, you do not have enough games on your champion in your last 50 games (minimum 7)")
         return redirect('analysis-search')
         
-    context["icon"] =  f'analysis/champions/{str(champions[0].key)}.png'
+    context["icon"] =  f'analysis/champions/{str(champions.key)}.png'
 
     goldCounter = 0 
     kdaCounter = 0
@@ -76,10 +81,10 @@ def home(request):
         
         if (match.is_remake == False):
             games_reviewed+=1
-            player = match.participants[cass.get_champion(champ)]
-            for i in match.participants:
-                if player.timeline.lane == match.participants[i].timeline.lane and player.timeline.role == match.participants[i].timeline.role and player.summoner != match.participants[i].summoner:
-                    enemy = match.participants[i]
+            player = match.participants[cass.get_champion(key=champ, region="NA")]
+            for j in match.participants:
+                if player.stats.role == match.participants[j].stats.role and player.stats.lane == match.participants[j].stats.lane and player.summoner != match.participants[j].summoner:
+                    enemy = match.participants[j]
                     break
 
             game_length = str(match.duration)
