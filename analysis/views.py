@@ -200,7 +200,6 @@ def home(request):
     work_on_teamfight = []
     work_on_splitpush = []
 
-
     # append what they need to work on into the respective arrays of their playstyle
     # whichever array is shorter, will be what closest represents their playstyle
     # after that, help the player determine what they need to improve upon in their playstyle
