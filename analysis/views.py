@@ -38,14 +38,14 @@ def home(request):
     matches = summoner.match_history
     gamesChecked = 0
 
-    while len(history) < 7 or gamesChecked >= 50:
+    while len(history) < 7 or gamesChecked >= 25:
         for participant in matches[gamesChecked].participants:
             if participant.summoner == summoner and participant.champion == champions:
                 history.append(matches[gamesChecked])
         gamesChecked+=1
 
     if len(history) < 7:
-        messages.warning(request, "Sorry, you do not have enough games on your champion in your last 50 games (minimum 7)")
+        messages.warning(request, "Sorry, you do not have enough games on your champion in your last 25 games (minimum 7)")
         return redirect('analysis-search')
         
     context["icon"] =  f'analysis/champions/{str(champions.key)}.png'
@@ -62,6 +62,7 @@ def home(request):
     baronCounter = 0
     dragCounter = 0
     riftCounter = 0
+    inhibCounter = 0
     towerCounter = 0
     ccCounter = 0
     healCounter = 0
@@ -69,7 +70,6 @@ def home(request):
     mitigatedCounter = 0
     firstBloodCounter = 0
     firstTowerCounter = 0
-    firstInhibCounter = 0
 
     earlyLead = 0
     midLead = 0
@@ -93,18 +93,16 @@ def home(request):
             
             if player.stats.first_blood_kill or player.stats.first_blood_assist:
                 firstBloodCounter += 1
-            if player.team.first_tower:
+            if player.stats.first_tower_kill or player.stats.first_tower_assist:
                 firstTowerCounter += 1
-            if player.team.first_inhibitor:
-                if player.stats.first_inhibitor_assist or player.stats.first_inhibitor_kill:
-                    firstInhibCounter+=1
             if (player.stats.gold_earned > enemy.stats.gold_earned):
                 goldCounter += 1
-            tempXP = 0
-            for xp in player.timeline.xp_per_min_deltas:
-                tempXP += player.timeline.xp_per_min_deltas[xp] - enemy.timeline.xp_per_min_deltas[xp]
-            tempXP /= len(player.timeline.xp_per_min_deltas)
-            if tempXP > 0:
+            if player.stats.inhibitor_takedowns > enemy.stats.inhibitor_takedowns:
+                inhibCounter += 1
+
+                
+            
+            if player.stats.champ_experience > enemy.stats.champ_experience:
                 xpCounter += 1
 
             if (player.stats.deaths < enemy.stats.deaths):
@@ -375,7 +373,7 @@ def home(request):
             work_on_splitpush.append("MID")
         if lateLead < excellent:
             work_on_splitpush.append("LATE")
-        if firstInhibCounter >= good:
+        if  inhibCounter >= good:
             splitting +=1 
         else:
             work_on_splitpush.append("INHIB")
@@ -415,7 +413,7 @@ def home(request):
             work_on_splitpush.append("MID")
         if lateLead < excellent:
             work_on_splitpush.append("LATE")
-        if firstInhibCounter >= good:
+        if inhibCounter >= good:
             splitting +=1 
         else:
             work_on_splitpush.append("INHIB")
