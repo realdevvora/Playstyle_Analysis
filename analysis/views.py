@@ -81,7 +81,8 @@ def home(request):
         
         if (match.is_remake == False):
             games_reviewed+=1
-            player = match.participants[cass.get_champion(key=champ, region="NA")]
+            player = match.participants[champions]
+            
             for j in match.participants:
                 if player.stats.role == match.participants[j].stats.role and player.stats.lane == match.participants[j].stats.lane and player.summoner != match.participants[j].summoner:
                     enemy = match.participants[j]
@@ -171,18 +172,30 @@ def home(request):
             if (player.stats.total_minions_killed + player.stats.neutral_minions_killed > enemy.stats.total_minions_killed + enemy.stats.neutral_minions_killed):
                 csCounter+=1
 
-            if len(player.timeline.xp_per_min_deltas) == 1:
-                if (int(player.timeline.xp_per_min_deltas['0-10']) > int(enemy.timeline.xp_per_min_deltas['0-10']) and int(player.timeline.gold_per_min_deltas['0-10']) > int(enemy.timeline.gold_per_min_deltas['0-10'])):
-                    earlyLead +=1
-            elif len(player.timeline.xp_per_min_deltas) == 2:
-                if (int(player.timeline.xp_per_min_deltas['10-20']) > int(enemy.timeline.xp_per_min_deltas['10-20']) and int(player.timeline.gold_per_min_deltas['10-20']) > int(enemy.timeline.gold_per_min_deltas['10-20'])):
+            print(len(player.timeline.frames), len(enemy.timeline.frames))
+            # if the player's gold and xp per min by mins 0-10 are greater than their opponent's, they have an early lead on them
+            if len(player.timeline.frames) > 9:
+                if ((player.timeline.frames[9].gold_earned - player.timeline.frames[0].gold_earned) / 10 > (enemy.timeline.frames[9].gold_earned - enemy.timeline.frames[0].gold_earned) / 10) and (player.timeline.frames[9].experience - player.timeline.frames[0].experience) / 10 > (enemy.timeline.frames[9].experience - enemy.timeline.frames[0].experience) / 10:
+                    earlyLead += 1
+
+            # checking gold and xp per min for mid game
+            if len(player.timeline.frames) > 19:
+                if ((player.timeline.frames[19].gold_earned - player.timeline.frames[10].gold_earned) / 10 > (enemy.timeline.frames[19].gold_earned - enemy.timeline.frames[10].gold_earned) / 10) and (player.timeline.frames[19].experience - player.timeline.frames[10].experience) / 10 > (enemy.timeline.frames[19].experience - enemy.timeline.frames[10].experience) / 10:
                     midLead += 0.75
-            elif len(player.timeline.xp_per_min_deltas) == 3:
-                if int(player.timeline.xp_per_min_deltas['20-30']) > int(enemy.timeline.xp_per_min_deltas['20-30']) and int(player.timeline.gold_per_min_deltas['20-30']) > int(enemy.timeline.gold_per_min_deltas['20-30']):
+            if len(player.timeline.frames) > 29:
+                if ((player.timeline.frames[29].gold_earned - player.timeline.frames[20].gold_earned) / 10 > (enemy.timeline.frames[29].gold_earned - enemy.timeline.frames[20].gold_earned) / 10) and (player.timeline.frames[29].experience - player.timeline.frames[20].experience) / 10 > (enemy.timeline.frames[29].experience - enemy.timeline.frames[20].experience) / 10:
                     midLead += 0.25
-            elif len(player.timeline.xp_per_min_deltas) == 4:
-                if (int(player.timeline.xp_per_min_deltas['30-end']) > int(enemy.timeline.xp_per_min_deltas['30-end']) and int(player.timeline.gold_per_min_deltas['30-end']) > int(enemy.timeline.gold_per_min_deltas['30-end'])):
-                    lateLead +=1.5
+
+            # checking gold and xp per min for late game
+            if len(player.timeline.frames) > 39:
+                if ((player.timeline.frames[39].gold_earned - player.timeline.frames[30].gold_earned) / 10 > (enemy.timeline.frames[39].gold_earned - enemy.timeline.frames[30].gold_earned) / 10) and (player.timeline.frames[39].experience - player.timeline.frames[30].experience) / 10 > (enemy.timeline.frames[39].experience - enemy.timeline.frames[30].experience) / 10:
+                    lateLead += 1
+            if len(player.timeline.frames) > 49:
+                if ((player.timeline.frames[49].gold_earned - player.timeline.frames[40].gold_earned) / 10 > (enemy.timeline.frames[49].gold_earned - enemy.timeline.frames[40].gold_earned) / 10) and (player.timeline.frames[49].experience - player.timeline.frames[40].experience) / 10 > (enemy.timeline.frames[49].experience - enemy.timeline.frames[40].experience) / 10:
+                    lateLead += 0.5
+            # after 50 mins, everyone has full build and lvl 18, so gold and xp dont matter
+                    
+                    
 
 
     excellent = games_reviewed - round(games_reviewed * 0.33,0)
@@ -346,7 +359,7 @@ def home(request):
 
 
 
-    if str(player.lane) != "Lane.jungle":
+    if str(player.stats.lane) != "Lane.jungle":
         if deathCounter >= excellent:
             splitting +=0.5
         else:
