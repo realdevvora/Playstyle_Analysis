@@ -82,9 +82,8 @@ def home(request):
         if (match.is_remake == False):
             games_reviewed+=1
             player = match.participants[champions]
-            
             for j in match.participants:
-                if player.stats.role == match.participants[j].stats.role and player.stats.lane == match.participants[j].stats.lane and player.summoner != match.participants[j].summoner:
+                if player.team_position == match.participants[j].team_position and player.summoner != match.participants[j].summoner:
                     enemy = match.participants[j]
                     break
 
@@ -453,7 +452,9 @@ def home(request):
     context["snowballing"] = snowballing
     context["sn"] = (snowballing/8)*100
 
+
     playstyle = [splitting, aggression, fighting, snowballing]
+
 
     context["feedback"] = []
     context["style"] = []
@@ -463,97 +464,97 @@ def home(request):
     if max(playstyle) == splitting:
         context["style"].append("Your playstyle is splitting")
         if "DEATHS" in work_on_splitpush:
-            context["feedback"].append(["Dying","You need to work on dying less frequently, typically splitpushers die when they are either collapsed/ganked in sidelane, or they partake in a teamfight which isn't in their favour"])
+            context["feedback"].append(["Dying (Splitpush)","You need to work on dying less frequently, typically splitpushers die when they are either collapsed/ganked in sidelane, or they partake in a teamfight which isn't in their favour"])
         if "XP" in work_on_splitpush:
-            context["feedback"].append(["Experience","You need to work on getting more experience than your opponent, if you are unable to do so, you aren't creating enough pressure in your sidelane."])
+            context["feedback"].append(["Experience (Splitpush)","You need to work on getting more experience than your opponent, if you are unable to do so, you aren't creating enough pressure in your sidelane."])
         if "XP2" in work_on_splitpush:
             context["feedback"].append(["Experience (Important)","You need to work on getting more experience than your opponent, if you are unable to do so, you aren't creating enough pressure in your sidelane."])
         if "TOWER" in work_on_splitpush:
-            context["feedback"].append(["Towers","You need to work on getting more turrets in order to open up the map for your teammates, along with getting a gold lead"])
+            context["feedback"].append(["Towers (Splitpush)","You need to work on getting more turrets in order to open up the map for your teammates, along with getting a gold lead"])
         if "DMG" in work_on_splitpush:
-            context["feedback"].append(["Damage","You need to do more damage to turrets, if you are not putting up enough damage to the turrets, you aren't contributing much to your team while splitpushing"])
+            context["feedback"].append(["Damage (Splitpush)","You need to do more damage to turrets, if you are not putting up enough damage to the turrets, you aren't contributing much to your team while splitpushing"])
         if "MID" in work_on_splitpush:
-            context["feedback"].append(["Mid-Game","You need to find ways to obtain a mid-game lead over your opponent. Understanding your champion and how to win lane matchups is the best way to do so."])
+            context["feedback"].append(["Mid-Game (Splitpush)","You need to find ways to obtain a mid-game lead over your opponent. Understanding your champion and how to win lane matchups is the best way to do so."])
         if "LATE" in work_on_splitpush:
-            context["feedback"].append(["Late-Game","You create most pressure while splitpushing in the late game. If you are able to get a lead over your opponent in the late game, you will typically be able to attract more members towards the lane you are pushing, giving your team a numbers advantage on objectives like dragons and barons"])
+            context["feedback"].append(["Late-Game (Splitpush)","You create most pressure while splitpushing in the late game. If you are able to get a lead over your opponent in the late game, you will typically be able to attract more members towards the lane you are pushing, giving your team a numbers advantage on objectives like dragons and barons"])
         if "INHIB" in work_on_splitpush:
-            context["feedback"].append(["Inhibitors","One of the most effective ways to create pressure without even going into a lane is having a pushing wave. Super minions are good at doing so, because they will require at least one person to defend, or they will 'splitpush' by themselves. Getting the first inhibitor can be really useful for you team, because you can end up in a win-win situation, where you either get turrets or drags/barons"])
+            context["feedback"].append(["Inhibitors (Splitpush)","One of the most effective ways to create pressure without even going into a lane is having a pushing wave. Super minions are good at doing so, because they will require at least one person to defend, or they will 'splitpush' by themselves. Getting the first inhibitor can be really useful for you team, because you can end up in a win-win situation, where you either get turrets or drags/barons"])
         if "FT" in work_on_splitpush:
-            context["feedback"].append(["First Tower","Although it may not happen every game due to the nature of LoL, getting the first turret is a great way to begin a splitpush (gives gold, allows for a laneswap with any losing lane, allows for further pressure in your lane, etc.)"])
+            context["feedback"].append(["First Tower (Splitpush)","Although it may not happen every game due to the nature of LoL, getting the first turret is a great way to begin a splitpush (gives gold, allows for a laneswap with any losing lane, allows for further pressure in your lane, etc.)"])
         if "BARON" in work_on_splitpush:
-            context["feedback"].append(["Barons","You want your team getting the baron nashor, because it makes your splitpush even stronger, and also allows for your team to seige. Whether you obtain it through pressure or by contributing to the teamfight, you want to make sure you get it whenever you can."])
+            context["feedback"].append(["Barons (Splitpush)","You want your team getting the baron nashor, because it makes your splitpush even stronger, and also allows for your team to seige. Whether you obtain it through pressure or by contributing to the teamfight, you want to make sure you get it whenever you can."])
         if "HERALD" in work_on_splitpush:
-            context["feedback"].append(["Heralds","If your jungler is topside and you have a pushing lane top/mid and an even lane top/mid, you can try and take the rift-herald. Typically they will use it in the lane which is splitpushing/gives more plates. This allows for even more gold and opens up a lane more. Always try and get your jungler to take the herald when it is free."])
+            context["feedback"].append(["Heralds (Splitpush)","If your jungler is topside and you have a pushing lane top/mid and an even lane top/mid, you can try and take the rift-herald. Typically they will use it in the lane which is splitpushing/gives more plates. This allows for even more gold and opens up a lane more. Always try and get your jungler to take the herald when it is free."])
     if max(playstyle) == aggression:
         context["style"].append("Your playstyle is aggression")
         if "KP" in work_on_aggression:
-            context["feedback"].append(["Kill Participation","You always want to make sure that you are making your enemies have minimal impact on the map, and therefore, should ideally have more kill participation. One of the best ways to do so is by roaming when you push in your lane, or counter jungling when the enemy jungler shows on the other side of the map/you know you are stronger"])
+            context["feedback"].append(["Kill Participation (Aggression)","You always want to make sure that you are making your enemies have minimal impact on the map, and therefore, should ideally have more kill participation. One of the best ways to do so is by roaming when you push in your lane, or counter jungling when the enemy jungler shows on the other side of the map/you know you are stronger"])
         if "DEATHS" in work_on_aggression:
-            context["feedback"].append(["Dying","Playing aggressive and playing carelessly are two different things. Although it is important to try out different things and maybe even limit test a little bit, you need to make sure that you are not carelessly dying and giving away leads"])
+            context["feedback"].append(["Dying (Aggression)","Playing aggressive and playing carelessly are two different things. Although it is important to try out different things and maybe even limit test a little bit, you need to make sure that you are not carelessly dying and giving away leads"])
         if "VISION" in work_on_aggression:
-            context["feedback"].append(["Vision","When playing aggressively, you want to get vision on the enemy. You always want to have as much information as possible before you play aggressive. Typically you want to place wards on either the enemy jungler's camps, or deny your opponent vision, so that you can gank/trade/roam more"])
+            context["feedback"].append(["Vision (Aggression)","When playing aggressively, you want to get vision on the enemy. You always want to have as much information as possible before you play aggressive. Typically you want to place wards on either the enemy jungler's camps, or deny your opponent vision, so that you can gank/trade/roam more"])
         if "FARM" in work_on_aggression:
-            context["feedback"].append(["Farming","You want to make sure that you have more farm than your enemy when you are playing aggressive, because you want to be denying them any lead they try to get"])
+            context["feedback"].append(["Farming (Aggression)","You want to make sure that you have more farm than your enemy when you are playing aggressive, because you want to be denying them any lead they try to get"])
         if "XP" in work_on_aggression:
-            context["feedback"].append(["Experience","Having more experience than your opponent is very necessary in order to have maximum control over the game. If your opponent has an level powerspike in their kit which you do not get, you are technically behind, unless you have a very significant gold lead"])
+            context["feedback"].append(["Experience (Aggression)","Having more experience than your opponent is very necessary in order to have maximum control over the game. If your opponent has an level powerspike in their kit which you do not get, you are technically behind, unless you have a very significant gold lead"])
         if "DRAG" in work_on_aggression:
-            context["feedback"].append(["Dragons","Getting dragons is very important when playing aggressive, because you are typically playing an early game champion. If you give the enemy dragons, you extend the length of the game and allow them to scale. Even if they do not necessarily scale, giving the dragon soul is a huge buff for the opponent. Always try to secure dragons in order to close out a game"])
+            context["feedback"].append(["Dragons (Aggression)","Getting dragons is very important when playing aggressive, because you are typically playing an early game champion. If you give the enemy dragons, you extend the length of the game and allow them to scale. Even if they do not necessarily scale, giving the dragon soul is a huge buff for the opponent. Always try to secure dragons in order to close out a game"])
         if "BARON" in work_on_aggression:
-            context["feedback"].append(["Barons","The baron is typically the game-finisher if you are playing properly when you are playing aggressive. If you get an early baron, you will be able to push very easily, get a lot of gold, and maybe even end the game if you have/can create the opportunity"])
+            context["feedback"].append(["Barons (Aggression)","The baron is typically the game-finisher if you are playing properly when you are playing aggressive. If you get an early baron, you will be able to push very easily, get a lot of gold, and maybe even end the game if you have/can create the opportunity"])
         if "EARLY" in work_on_aggression:
-            context["feedback"].append(["Early-Game","Early game aggression is the most important. You have the most control over a game at the earliest parts, the later a game goes, the less control you have. If you are able to deny your opponent and have impact on other lanes as early as possible, you will have the highest chance of winning the game."])
+            context["feedback"].append(["Early-Game (Aggression)","Early game aggression is the most important. You have the most control over a game at the earliest parts, the later a game goes, the less control you have. If you are able to deny your opponent and have impact on other lanes as early as possible, you will have the highest chance of winning the game."])
         if "EARLY2" in work_on_aggression:
-            context["feedback"].append(["Early-Game (Important)","Early game aggression is the most important. You have the most control over a game at the earliest parts, the later a game goes, the less control you have. If you are able to deny your opponent and have impact on other lanes as early as possible, you will have the highest chance of winning the game."])
+            context["feedback"].append(["Early-Game (Important) ","Early game aggression is the most important. You have the most control over a game at the earliest parts, the later a game goes, the less control you have. If you are able to deny your opponent and have impact on other lanes as early as possible, you will have the highest chance of winning the game."])
         if "MID" in work_on_aggression:
-            context["feedback"].append(["Mid-Game","The mid game is where most aggressive players can easily give leads to their opponent. Many players deny their opponent early, but then forget/ignore them and allow them to scale up and come back into the game"])
+            context["feedback"].append(["Mid-Game (Aggression)","The mid game is where most aggressive players can easily give leads to their opponent. Many players deny their opponent early, but then forget/ignore them and allow them to scale up and come back into the game"])
         if "FB" in work_on_aggression:
-            context["feedback"].append(["First Blood","Not a very important characteristic of aggressive players, but if you play an early game champion, you may want to try and invade with your team in order to get a quick and easy advantage"])
+            context["feedback"].append(["First Blood (Aggression)","Not a very important characteristic of aggressive players, but if you play an early game champion, you may want to try and invade with your team in order to get a quick and easy advantage"])
 
     if max(playstyle) == fighting:
         context["style"].append("Your playstyle is fighting")
         if "KP" in work_on_teamfight:
-            context["feedback"].append(["Kill Participation","Having more kill participation than your opponent means that you are typically partaking in plays more often than them. If this is consistently the case, you will typically end up getting more objectives and towers."])
+            context["feedback"].append(["Kill Participation (Teamfight)","Having more kill participation than your opponent means that you are typically partaking in plays more often than them. If this is consistently the case, you will typically end up getting more objectives and towers."])
         if "KP2" in work_on_teamfight:
             context["feedback"].append(["Kill Participation (Important)","Having more kill participation than your opponent means that you are typically partaking in plays more often than them. If this is consistently the case, you will typically end up getting more objectives and towers."])
         if "DEATHS" in work_on_teamfight:
-            context["feedback"].append(["Dying","Dying is a very common thing when playing solo queue. As a fighter, you should understand why you are dying. Are you getting caught out while making a pick, or chasing, or partaking in a fight which you should not take part in? There are lots of reasons why you could be giving unnecessary gold which can convert into objectives to the opponent."])
+            context["feedback"].append(["Dying (Teamfight)","Dying is a very common thing when playing solo queue. As a fighter, you should understand why you are dying. Are you getting caught out while making a pick, or chasing, or partaking in a fight which you should not take part in? There are lots of reasons why you could be giving unnecessary gold which can convert into objectives to the opponent."])
         if "ROLE" in work_on_teamfight:
-            context["feedback"].append(["Team Role","Playing your role in fights is also very important. You should know whether you should be dishing out a lot of damage, or taking a lot of damage, or CCing the opponents, or healing your team, based on your role in the game. You should also know how to play for a teamfight, and how to position (ex. an assassin would look for a flank, cc/frontline would look to peel, marksman/mage would stay away from enemy threat and deal damage)"])
+            context["feedback"].append(["Team Role (Teamfight)","Playing your role in fights is also very important. You should know whether you should be dishing out a lot of damage, or taking a lot of damage, or CCing the opponents, or healing your team, based on your role in the game. You should also know how to play for a teamfight, and how to position (ex. an assassin would look for a flank, cc/frontline would look to peel, marksman/mage would stay away from enemy threat and deal damage)"])
         if "TOWER" in work_on_teamfight:
-            context["feedback"].append(["Towers","Seiging is the best way to win a game. Without any towers, you will limit your vision control, pressure in lanes, and ability to get objectives. Although you may play for teamfights and other objectives, you have to know when you should push for towers, otherwise, you are just wasting a lot of time, gold, and opportunities."])
+            context["feedback"].append(["Towers (Teamfight)","Seiging is the best way to win a game. Without any towers, you will limit your vision control, pressure in lanes, and ability to get objectives. Although you may play for teamfights and other objectives, you have to know when you should push for towers, otherwise, you are just wasting a lot of time, gold, and opportunities."])
         if "VISION" in work_on_teamfight:
-            context["feedback"].append(["Vision","Having good vision in teamfights is the best way to have more information for your team, as well as making it so your team cannot die to a flank/surprise. The best way to get vision on an objective is to arrive early before it spawns and set your own vision, and deny enemy vision."])
+            context["feedback"].append(["Vision (Teamfight)","Having good vision in teamfights is the best way to have more information for your team, as well as making it so your team cannot die to a flank/surprise. The best way to get vision on an objective is to arrive early before it spawns and set your own vision, and deny enemy vision."])
         if "GOLD" in work_on_teamfight:
-            context["feedback"].append(["Gold","Having more gold than your opponent in a teamfight typically means that it will be easier for you to play your role effectively. Although individual gold is not the most important thing for teamfighting, it can be helpful."])
+            context["feedback"].append(["Gold (Teamfight)","Having more gold than your opponent in a teamfight typically means that it will be easier for you to play your role effectively. Although individual gold is not the most important thing for teamfighting, it can be helpful."])
         if "XP" in work_on_teamfight:
-            context["feedback"].append(["Experience","Having more experience than your opponent means that you will have higher upgraded abilities and base stats. This will make you a bigger threat to the opponent."])
+            context["feedback"].append(["Experience (Teamfight)","Having more experience than your opponent means that you will have higher upgraded abilities and base stats. This will make you a bigger threat to the opponent."])
         if "OBJECTIVE" in work_on_teamfight:
-            context["feedback"].append(["Objectives","Objectives are usually where you will be teamfighting. To either contest an objective, or to force it. If you are not getting objectives very often, you are not teamfighting correctly."])
+            context["feedback"].append(["Objectives (Teamfight)","Objectives are usually where you will be teamfighting. To either contest an objective, or to force it. If you are not getting objectives very often, you are not teamfighting correctly."])
         if "OBJECTIVE2" in work_on_teamfight:
             context["feedback"].append(["Objectives (Important)","Objectives are usually where you will be teamfighting. To either contest an objective, or to force it. If you are not getting objectives very often, you are not teamfighting correctly."])
 
     if max(playstyle) == snowballing:
         context["style"].append("Your playstyle is snowballing")
         if "FARM" in work_on_snowball:
-            context["feedback"].append(["Farming","Farming is usually the best way to get a snowball going. Even if you are playing a champion that does not necessarily snowball though farming, it is a good way to keep the snowballing threat going, as you will always be in a position to get kills."])
+            context["feedback"].append(["Farming (Snowball)","Farming is usually the best way to get a snowball going. Even if you are playing a champion that does not necessarily snowball though farming, it is a good way to keep the snowballing threat going, as you will always be in a position to get kills."])
         if "FARM2" in work_on_snowball:
             context["feedback"].append(["Farming (Important)","Farming is usually the best way to get a snowball going. Even if you are playing a champion that does not necessarily snowball though farming, it is a good way to keep the snowballing threat going, as you will always be in a position to get kills."])
         if "KP" in work_on_snowball:
-            context["feedback"].append(["Kill Participation","Kill participation defines a snowballer, as it shows how well they are able to take an opportunity and create/extend a lead. Getting more kill participation is necessary to have an impact on the game."])
+            context["feedback"].append(["Kill Participation (Snowball)","Kill participation defines a snowballer, as it shows how well they are able to take an opportunity and create/extend a lead. Getting more kill participation is necessary to have an impact on the game."])
         if "DEATHS" in work_on_snowball:
-            context["feedback"].append(["Dying","Dying is the easiest way to lose a snowballing lead, if you are giving away large shutdowns or getting caught before objectives or just dying for no significant reason, you are losing your ability to carry the game."])
+            context["feedback"].append(["Dying (Snowball)","Dying is the easiest way to lose a snowballing lead, if you are giving away large shutdowns or getting caught before objectives or just dying for no significant reason, you are losing your ability to carry the game."])
         if "OBJECTIVE" in work_on_snowball:
-            context["feedback"].append(["Objectives","Typically as a snowballer, you will be the biggest threat for the opponent. Therefore, you should be able to play threateningly enough to get the objectives. The difficult part about doing so is finding the balance between playing too aggressive and dying, and playing too passive (KDA player)."])
+            context["feedback"].append(["Objectives (Snowball)","Typically as a snowballer, you will be the biggest threat for the opponent. Therefore, you should be able to play threateningly enough to get the objectives. The difficult part about doing so is finding the balance between playing too aggressive and dying, and playing too passive (KDA player)."])
         if "BARON" in work_on_snowball:
-            context["feedback"].append(["Barons","Getting barons is the key to closing out games as a snowballer. You will usually win your games if you get the baron and pressure lanes."])
+            context["feedback"].append(["Barons (Snowball)","Getting barons is the key to closing out games as a snowballer. You will usually win your games if you get the baron and pressure lanes."])
         if "MID" in work_on_snowball:
-            context["feedback"].append(["Mid-Game","The mid game is where you should be strongest as a snowballer. It is the point of the game where you can make the greatest impact and get advantages for your team. You want to make sure you have an advantage over your opponent during this time."])
+            context["feedback"].append(["Mid-Game (Snowball)","The mid game is where you should be strongest as a snowballer. It is the point of the game where you can make the greatest impact and get advantages for your team. You want to make sure you have an advantage over your opponent during this time."])
         if "TOWER" in work_on_snowball:
-            context["feedback"].append(["Towers","Getting towers is an important factor to win games in general. If you have more towers, you will get more vision areas, jungle camps, and therefore have better chances to get objectives."])
+            context["feedback"].append(["Towers (Snowball)","Getting towers is an important factor to win games in general. If you have more towers, you will get more vision areas, jungle camps, and therefore have better chances to get objectives."])
         if "VISION" in work_on_snowball:
-            context["feedback"].append(["Vision","Vision can give your team more information, as well as deny the enemy information. Having good vision control is the best way to make more guaranteed plays."])
+            context["feedback"].append(["Vision (Snowball)","Vision can give your team more information, as well as deny the enemy information. Having good vision control is the best way to make more guaranteed plays."])
         if "ROLE" in work_on_snowball:
-            context["feedback"].append(["Team Role","Playing your role in teamfights is very important when snowballing. You should typically be able to attract the attention of multiple members on the enemy team if you are playing your role correctly. This will make it a lot easier for your team to win fights and convert leads."])
+            context["feedback"].append(["Team Role (Snowball)","Playing your role in teamfights is very important when snowballing. You should typically be able to attract the attention of multiple members on the enemy team if you are playing your role correctly. This will make it a lot easier for your team to win fights and convert leads."])
         if "ROLE2" in work_on_snowball:
             context["feedback"].append(["Team Role (Important)","Playing your role in teamfights is very important when snowballing. You should typically be able to attract the attention of multiple members on the enemy team if you are playing your role correctly. This will make it a lot easier for your team to win fights and convert leads."])
     if len(context["feedback"]) == 0:
