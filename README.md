@@ -16,12 +16,13 @@ The following are examples of statistics for top players on their one-trick cham
 
 [Example Stats (1)](analysis/static/analysis/screenshots/karasmai.png)
 
-[Dropdown](analysis/static/analysis/screenshots/dropdown.png)
 
-[(2)](analysis/static/analysis/screenshots/tfblade.png)
+![Dropdown](analysis/static/analysis/screenshots/dropdown.png)
 
-[(3)](analysis/static/analysis/screenshots/sylas.png)
+![(2)](analysis/static/analysis/screenshots/tfblade.png)
 
-[(4)](analysis/static/analysis/screenshots/davemon.png)
+![(3)](analysis/static/analysis/screenshots/sylas.png)
+
+![(4)](analysis/static/analysis/screenshots/davemon.png)
 
 Credit to CoreySchafer for Django interface
