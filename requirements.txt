@@ -1,0 +1,5 @@
+cassiopeia==5.0.1
+datapipelines==1.0.7
+Django==3.2.5
+django_cassiopeia==2.1.1
+merakicommons==1.0.10
