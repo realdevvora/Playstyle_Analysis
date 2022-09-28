@@ -55,7 +55,7 @@ CASSIOPEIA_LOGGING = {
 
 # os.environ.get('RIOT_API_KEY')
 
-CASSIOPEIA_RIOT_API_KEY = os.environ.get('RIOT_API_KEY') # api key in env var
+CASSIOPEIA_RIOT_API_KEY = os.environ.get("RIOT_API_KEY") # api key in env var
 CASSIOPEIA_LIMITING_SHARE = 1.0
 CASSIOPEIA_PIPELINE = {
     "Omnistone": {},

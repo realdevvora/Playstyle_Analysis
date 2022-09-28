@@ -39,9 +39,13 @@ def home(request):
     gamesChecked = 0
 
     while len(history) < 7 or gamesChecked >= 25:
-        for participant in matches[gamesChecked].participants:
-            if participant.summoner == summoner and participant.champion == champions:
-                history.append(matches[gamesChecked])
+        try:
+            for participant in matches[gamesChecked].participants:
+                if participant.summoner == summoner and participant.champion == champions:
+                    history.append(matches[gamesChecked])
+        except IndexError:
+            print(gamesChecked)
+            break
         gamesChecked+=1
 
     if len(history) < 7:
