@@ -37,19 +37,14 @@ def home(request):
     history = []
     matches = summoner.match_history
     gamesChecked = 0
-
-    while len(history) < 7 or gamesChecked >= 25:
-        try:
-            for participant in matches[gamesChecked].participants:
-                if participant.summoner == summoner and participant.champion == champions:
-                    history.append(matches[gamesChecked])
-        except IndexError:
-            print(gamesChecked)
-            break
+    while gamesChecked < 20:
+        for participant in matches[gamesChecked].participants:
+            if participant.summoner == summoner and participant.champion == champions:
+                history.append(matches[gamesChecked])
         gamesChecked+=1
 
     if len(history) < 7:
-        messages.warning(request, "Sorry, you do not have enough games on your champion in your last 25 games (minimum 7)")
+        messages.warning(request, "Sorry, you do not have enough games on your champion in your last 20 games (minimum 7)")
         return redirect('analysis-search')
         
     context["icon"] =  f'analysis/champions/{str(champions.key)}.png'
@@ -80,7 +75,7 @@ def home(request):
     lateLead = 0
 
     games_reviewed=0
-    for i in range(7):
+    for i in range(len(history)):
         match = history[i]
         
         if (match.is_remake == False):
