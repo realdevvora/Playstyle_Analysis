@@ -570,5 +570,3 @@ def about(request):
 
 def search(request):
     return render(request, 'analysis/search.html')
-# make the search site (after you register) which will have a form and be the one where you search for your champion using your summoner name
-# 
